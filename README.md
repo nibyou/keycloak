@@ -38,7 +38,7 @@ import { KeycloakModule } from '@nibyou/keycloak'; // <-- the import
 
 @Module({
   imports: [
-    KeycloakModule, // <-- the module to your app module
+    KeycloakModule, // <-- add the module to your app module
   ],
   controllers: [AppController],
   providers: [AppService],

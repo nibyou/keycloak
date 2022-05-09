@@ -6,11 +6,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.KeycloakModule = void 0;
+exports.getKcAdminClient = exports.KeycloakModule = void 0;
 const common_1 = require("@nestjs/common");
 const nest_keycloak_connect_1 = require("nest-keycloak-connect");
 require("dotenv/config");
 const core_1 = require("@nestjs/core");
+const keycloak_admin_client_1 = require("@keycloak/keycloak-admin-client");
 let KeycloakModule = class KeycloakModule {
 };
 KeycloakModule = __decorate([
@@ -44,4 +45,18 @@ KeycloakModule = __decorate([
     })
 ], KeycloakModule);
 exports.KeycloakModule = KeycloakModule;
+const kcAdminClient = new keycloak_admin_client_1.default({
+    baseUrl: process.env.KEYCLOAK_URL,
+    realmName: process.env.KEYCLOAK_ADMIN_REALM,
+});
+async function getKcAdminClient() {
+    await kcAdminClient.auth({
+        username: process.env.KEYCLOAK_ADMIN_USER,
+        password: process.env.KEYCLOAK_ADMIN_PASS,
+        grantType: 'password',
+        clientId: process.env.KEYCLOAK_ADMIN_CLIENT,
+    });
+    return kcAdminClient;
+}
+exports.getKcAdminClient = getKcAdminClient;
 //# sourceMappingURL=index.js.map

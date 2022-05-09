@@ -7,6 +7,7 @@ import {
 } from 'nest-keycloak-connect';
 import 'dotenv/config';
 import { APP_GUARD } from '@nestjs/core';
+import KcAdminClient from '@keycloak/keycloak-admin-client';
 
 @Module({
     imports: [
@@ -53,3 +54,19 @@ import { APP_GUARD } from '@nestjs/core';
     ],
 })
 export class KeycloakModule {}
+
+const kcAdminClient = new KcAdminClient({
+    baseUrl: process.env.KEYCLOAK_URL,
+    realmName: process.env.KEYCLOAK_ADMIN_REALM,
+});
+
+export async function getKcAdminClient() {
+    await kcAdminClient.auth({
+        username: process.env.KEYCLOAK_ADMIN_USER,
+        password: process.env.KEYCLOAK_ADMIN_PASS,
+        grantType: 'password',
+        clientId: process.env.KEYCLOAK_ADMIN_CLIENT,
+    });
+
+    return kcAdminClient;
+}
